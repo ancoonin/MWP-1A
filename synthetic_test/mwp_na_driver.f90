@@ -304,12 +304,12 @@ tdiff=ABS(tsteps-model(i+2))
   write(*,*) 'adjusted model from NA for SL: ', model_overwrite(:)
 
   ! set up multiplication factor for 1 meter of eustatic melt:
-  ! values are from mwp_param.inc !
-  !f_ice(1)=NAm_esl ! North American Ice Sheet
+  
+  !f_ice(1)=LIS_esl ! Laurentide Ice Sheet
   !f_ice(2)=GL_esl ! Greenland Ice Sheet
-  f_ice(1)=EIS_esl ! Scandinavian Ice Sheet
+  f_ice(1)=EIS_esl ! Eurasian Ice Sheet
   f_ice(2)=WA_esl ! West Antarctic Ice Sheet
-  !f_ice(5)=EA_esl ! East Antarctic Ice Sheet
+  !f_ice(5)=WL_esl ! Wilkes Land, East Antarctica
 
  ! load in pre-MWP ice grid (14.675 ka extent)
   open(unit=99,file=trim(path2iceinputs)//'ice_7g_14675ka.dat',form='formatted',&

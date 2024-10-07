@@ -45,17 +45,6 @@ subroutine user_init(nd,ranges,scales)
   real, dimension(2,nd_max) :: ranges
   real, dimension(nd_max+1) :: scales
   integer :: nd
-  ! HL: common blocks are part of the declaration and go first.
-
-  !! HL: Because of "implicit none" *everything* has to be declared
-  !!     So while they aren't in the original NA scripts, let's do it here
-  !!     I googled this:
-
-  ! "The rule is that undeclared variables which have the first letter I, J, K,
-  ! L, M or N are considered INTEGER-s, and undeclared variables which start in
-  ! A through H and O through Z are considered REAL-s."
-  ! everytime we see the common block, we'll copy and paste this;
-
   integer ::  lu_na,lu_out,lu_sum,lu_det,lu_sob,lu_dis,lu_nad
   real ::  verbose,debug,timing,summary
   integer :: iproc,nproc,lroot
@@ -70,8 +59,6 @@ subroutine user_init(nd,ranges,scales)
 
   common /NAMPI/iproc,nproc,lroot
 
-!  common /mwp_com/observed_data, predicted_data, SLIP_error,lu_mod
-
   ! Define scales (non-dimensionalizations) and ranges
   ! for each free parameter --AC
 
@@ -80,14 +67,13 @@ subroutine user_init(nd,ranges,scales)
               ! anything else, still need to specify each scale factor
 
  !-------------------------------------------------------------------------             
-!run should converge on the "true model" --AC
 
- !e.s.l. contributions from each ice sheet:
- !scales(2:3)=20.0 ! scaling by fraction of approx average MWP1A sea level rise
- ranges(1,1:2)=0.0 !min possible contribution of e.s.l. from each ice sheet
+ !this NA Sampler run should converge on the "true model" --AC
+
+ !GMSL equivalent contributions from each ice sheet:
+ ranges(1,1:2)=0.0 !min possible contribution from each ice sheet
  
-  ! for background maxwell earth model: prem.l75.umvm7.lmvm7
-  ! read in from prem.inc file in include directory:
+! read in from prem.inc file in include directory:
 
  !ranges(2,1)=LISmaxesl !upper bound for LIS
  !ranges(2,2)= GISmaxesl  !upper bound for GIS
@@ -95,7 +81,6 @@ subroutine user_init(nd,ranges,scales)
  ranges(2,2)= WAISmaxesl !upper bound for WAIS
  !ranges(2,5)= WLmaxesl !upper bound for WL
 
- ! Note that the max possible contributions of e.s.l. from each ice sheet vary by earth model 
 
  !-------------------------------------------------------------------------             
 
@@ -169,10 +154,8 @@ subroutine forward(nd,model,lppd,model_overwrite)
   !Info and Logical unit common block used by NA routines
   integer ::  lu_na,lu_out,lu_sum,lu_det,lu_sob,lu_dis,lu_nad
   real ::  verbose,debug,timing,summary
- ! integer :: iproc,nproc,lroot
   integer :: lu_mod
 
-  !real, dimension(100) :: times
   real, allocatable :: times (:)                ! Timesteps of ice model (years)
   
   !real, dimension(nlat,nlon,ntimesduringMWP) :: icegrid, ice_load
@@ -197,21 +180,13 @@ subroutine forward(nd,model,lppd,model_overwrite)
   real, allocatable :: WAIS_preMWP(:,:)
   real, allocatable :: WL_preMWP(:,:)
 
-  !!AC testing:
-  real,dimension(512,1024):: check
-  character(LEN=2) :: tindx
-
 common /NA_IO/lu_na,lu_out,lu_sum,lu_det,lu_sob,lu_dis,&
                  lu_nad,verbose,debug,timing,summary
-
-!common /mwp_com/observed_data, predicted_data, SLIP_error,lu_mod
 
   ! begin code:
 
 call read_config(planetModel,path2loveinputs,path2SLinputs,path2iceinputs) !--AC
 
-   ! write(fmt1,'(I4)') nlon
-   ! fmt2 = '('//trim(fmt1)//'E15.7)'
 
   allocate (icegrid(nlat,nlon,ntimesduringMWP))
   allocate(times(108))
@@ -263,39 +238,36 @@ call read_config(planetModel,path2loveinputs,path2SLinputs,path2iceinputs) !--AC
 
   tsteps(:)=times(first_tstep-1:size(times))
 
-        do i=1,2
+        do i=1,2 !for each potential ice source being considered
         !onset of melting
-tdiff=ABS(tsteps-model(i+2))
+        tdiff=ABS(tsteps-model(i+2))
         start_ix(i)=MINLOC(tdiff,1) !start_ix is an integer. 
-  start_time(i)=tsteps(start_ix(i))
+        start_time(i)=tsteps(start_ix(i))
 
   
-  !end of melting
-  tdiff=ABS(tsteps-start_time(i)-model(i+4))
-  end_ix(i)=MINLOC(tdiff,1)
-  end_time(i)=tsteps(end_ix(i))
+        !end of melting
+        tdiff=ABS(tsteps-start_time(i)-model(i+4))
+        end_ix(i)=MINLOC(tdiff,1)
+        end_time(i)=tsteps(end_ix(i))
 
-  !since we are only running the SL code to 13.75 ka, cap duration of melting
+        !since we are only running the SL code to 13.75 ka, cap duration of melting:
   
-          if (end_time(i)>MAXVAL(times)) then
+            if (end_time(i)>MAXVAL(times)) then
                 end_time(i)=MAXVAL(times)
-          endif 
-  end_ix(i)=end_ix(i)-1 !we start the checkpoint at the timestep following 14.675 ka so this ensures melting ceases by the correct time
-  !within the checkpoint script
+            endif 
+         end_ix(i)=end_ix(i)-1 !we start the checkpoint at the timestep following 14.675 ka
+                              !so this ensures melting ceases by the correct time
+                              !within the checkpoint MWP-1A forward sea-level model
 
-  enddo
+         enddo
 
   do i=1,2
-        if (model(i).lt.0.01) then !if the NA chooses e.s.l. less than 1cm
-                                   !set to zero 
+        if (model(i).lt.0.01) then !if the NA chooses e.s.l. less than 1cm set to zero 
         model_overwrite(i)=0.0
         else 
         model_overwrite(i)=model(i)
         endif
   enddo
-
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
 
   dur(:) = end_time(:)-start_time(:)
   model_overwrite(3:4)=start_time(:)
@@ -393,7 +365,7 @@ contribution(:,:)=EIS_preMWP(:,:)*per_tstep(i)*f_ice(i);! ice thickness map to s
                 endif
           enddo
 
-! next: WAIS loss
+! WEST ANTARCTIC ICE SHEET LOSS
 i=2
 nactivetimesteps(i)=NINT(dur(i)/25.0) !number of 25 year timesteps over which melting will occur
 per_tstep(i)=model_overwrite(i)/real(nactivetimesteps(i)) ! m of e.s.l. to remove during each active melting timestep
@@ -464,7 +436,6 @@ enddo
 lppd=misfitval
 
 write(*,*) 'misfit value for current model: ',lppd
-!write(*,*) 'predicted_data for current model: ',predicted_data
 
 ! writing file with all predicted_data values for each forward model run:
 
@@ -496,11 +467,10 @@ end subroutine forward
 !       ns1 (initial sample size used by NA),                            !
 !       ns2 (normal sample size used by NA),                             !
 !       itmax (number of iterations)                                     !
-! outputs:                                                               !
 ! ====================================================================== !
 
 subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
-                       nh)!, header)
+                       nh)
 
   include 'mwp_param.inc'
   include 'mwp_na_param.inc'
@@ -519,7 +489,6 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
   integer :: nd, ns, np, mopt, ns1, ns2, itmax, nh, ntot !--AC
   integer ::  lu_na,lu_out,lu_sum,lu_det,lu_sob,lu_dis,lu_nad
   real ::  verbose,debug,timing,summary
- ! integer :: iproc,nproc,lroot
   integer :: lu_mod, jj, lu_out2
   real, dimension(ndata) :: observed_data,predicted_data,SLIP_error
 
@@ -528,8 +497,6 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
   common /NA_IO/lu_na,lu_out,lu_sum,lu_det,lu_sob,lu_dis,&
                 lu_nad,verbose,debug,timing,summary
 
-!  common /mwp_com/ observed_data, predicted_data, SLIP_error,lu_mod
-
 !write out models at each iteration
   mfitmin = misfit(1)
   ns = ns1
@@ -537,17 +504,8 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
   mopt = 1
 
 !turn off writing to standard out by setting lu to zero
-  !lu_out2 = lu_out
-  lu_out2 = 0 ! RFI example had this setting --AC
+  lu_out2 = 0
 
-!writing file to output model info --AC
-!open(unit=lu_mod,file='mwp_output',form='formatted',&
-!       access='sequential',status='unknown')
-!
-!  write(lu_mod,*) ns1,' Number of samples in starting pool'
-!  write(lu_mod,*) ns2,' Number of new samples per iteration'
-!  write(lu_mod,*) itmax,' Number of iterations'
-!
 !loop over iterations
   do it=1,itmax+1
    mfitminc = misfit(np+1)
@@ -565,15 +523,6 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
       end do
       mfitmean = mfitmean/ns
 
-    !write out all models from this iteration to mwp_output file.
-      !write(lu_mod,801) it-1, mfitmin, mfitmean, mfitminc
-!       write(lu_mod,*) 'it:',it-1, 'mfitmin:', mfitmin, 'mfitmean:', mfitmean, 'mfitminc:', mfitminc
-!      do i=1,ns
-!           jj = np + i
-!           call display_model(lu_mod, i, models(1,jj), nd, misfit(jj) )
-!
-!      end do
-
     np = np + ns
     ns = ns2
 
@@ -585,25 +534,19 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
 
 ! Write out final model
 
- ! call display_final(lu_out, models(1,mopt), nd, mfitmin)
- ! call display_final(lu_mod, models(1,mopt), nd)!, mfitmin)
-!close(lu_mod)
-
   call display_final(lu_sum, models(1,mopt), nd)!, mfitmin)
 
     do j=1,nd
-       rmodel(j) = models(j,mopt) !--AC 
+       rmodel(j) = models(j,mopt) 
     end do
 
 ! repeat forward modelling for optimum model
 
  call forward(nd,rmodel,lppd,model_overwrite)
 
-!write RFI component of header for NAD file (can leave blank and set nh to 0)
+!write header for NAD file (can leave blank and set nh to 0)
   nh = 0
-!--AC commented out to test
-  !801      format( 'iteration:',i5,',  misfit: min=',ES10.8, &
-  !          ', mean=',ES10.8,', minc=',ES10.8 )
+
 
 return
 end subroutine writemodels
@@ -625,17 +568,11 @@ subroutine display_model(lu,imod,rmodel,moddim,misfitval)
   real, dimension(moddim) :: rmodel
   real :: misfitval
   integer :: lu,imod
-  !Write out model 'rmodel'
-  !write(lu,801) imod, misfitval
   write(lu,fmt=*) 'model: ', imod,'misfit value: ', misfitval
 
   do j=1,moddim
-  !write(lu,811) rmodel(j)
   write(lu,fmt=*) rmodel(j)
   end do
-
-  !801   format( '  model:',i5,',   misfit value:',ES10.8 )
-  !811   format(ES10.8)
 
 return
 end subroutine display_model
@@ -659,24 +596,19 @@ subroutine output_summary(lu_out, lu_sum, it, rmodel, &
   real :: mfitmin, mfitmean, mfitminc
   logical :: lw
   integer :: lu_sum, lu_out, it,  ntot, mopt
-!write out headers for files with summary of optimization performance
 
   lw = .true.
   if(lu_out.eq.0)lw = .false.
-  !write(lu_sum,801)
   write(lu_sum,*) 'it: ', it, 'Nsampled: ',ntot
   write(lu_sum,*) 'Mfitmin: ',mfitmin,'Mfitmean: ',mfitmean,'Mfitmeanc: ',mfitminc, 'Mopt: ', mopt
 
   if(lw)write(lu_out,801)
 
-  !write(lu_sum,811) it,ntot,mfitmin,mfitmean, &
-  !                  mfitminc,mopt
 
   if(lw)write(lu_out,811) it,ntot,mfitmin,mfitmean, &
                     mfitminc,mopt
 
   do j=1,nd_max
-  !write(lu_sum,812) rmodel(j)
   write(lu_sum,*) rmodel(j)
   if(lw)write(lu_out,812) rmodel(j)
   enddo
@@ -704,10 +636,8 @@ end subroutine output_summary
 ! ====================================================================== !
 
 subroutine display_final(lu, rmodel, moddim)
-        !, misfitval)
+      
 
-   ! include 'mwp_param.inc'
-   ! include 'mwp_na_param.inc'
     integer :: lu, moddim
     real,dimension(moddim) :: rmodel
     ! Write out final model
@@ -718,7 +648,6 @@ subroutine display_final(lu, rmodel, moddim)
       write(lu,*) rmodel(j)
     end do
 
-    !811   format(ES10.8)
 
 return
 end subroutine display_final

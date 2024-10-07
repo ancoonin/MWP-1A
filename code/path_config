@@ -1,0 +1,17 @@
+!! Configuration file to specify all path directories and filenames required for coupled NA + SL model !!
+
+!planetModel to use in sl code:
+'prem.l75.umvm7.lmvm7'
+
+!path to planetFolder ('INPUT_OTHERS') which contains love number inputs for SL code
+'/users/acoonin/data/MWP1A/prem.l75.umvm7.lmvm7_maxwell/data/'
+
+!path to initial topography file and all variables saved for SL checkpoint
+'/users/acoonin/data/MWP1A/prem.l75.umvm7.lmvm7_maxwell/data/sl_inputs/prem.l75.umvm7.lmvm7/'
+
+!path to driver inputs (total preMWP ice grid, and individual preMWP ice masks for each ice sheet)
+'/users/acoonin/data/MWP1A/prem.l75.umvm7.lmvm7_maxwell/data/driver_inputs/'
+
+
+
+!! User must adjust directories and file paths accordingly !!

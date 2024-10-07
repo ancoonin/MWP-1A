@@ -1,0 +1,31 @@
+Coonin, Lau, and Coulson 2024 MWP-1A paper
+
+
+Full contents of the repository:
+
+inputs/
+
+	LoveNumbers/ (Maxwell and Transient Viscoelastic Love numbers. i.e. Earth model input to forward sea-level model)
+	driver_inputs/ (MWP-1A ice source masks used to generate MWP-1A ice melting evolutions)
+	sl_input/ (self-consistent ice + ocean loading leading up to MWP-1A)
+
+code/
+
+	include/ (files used by NA-SL code)
+	NA driver [currently cleaning up, to be uploaded by Oct 15]
+        forward sea-level model  [currently cleaning up, to be uploaded by Oct 15]
+	RSL calculation for SLIP data [currently cleaning up, to be uploaded by Oct 15] 
+data/
+
+	for each choice of solid Earth rheology:
+		output model ensemble from NA Sampler
+		output Bayesian statistics from NA Bayes 
+
+
+synthetic_test/
+	NA driver script
+	include/ (files used by NA-SL code)
+	data/ (outputs from NA Sampler and NA Bayes)
+
+
+

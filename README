@@ -5,7 +5,7 @@ Full contents of the repository:
 
 inputs/
 
-	LoveNumbers/ (Maxwell and Transient Viscoelastic Love numbers. i.e. Earth model input to forward sea-level model)
+	LoveNumbers/ (Love numbers. i.e. Earth model input to forward sea-level model)
 	driver_inputs/ (MWP-1A ice source masks used to generate MWP-1A ice melting evolutions)
 	sl_input/ (self-consistent ice + ocean loading leading up to MWP-1A)
 

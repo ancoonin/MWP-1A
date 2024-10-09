@@ -69,10 +69,13 @@ subroutine user_init(nd,ranges,scales)
   ! and ranges for each free parameter
 
   scales(1)=5.0 ! scales(1) = 0 this makes all scales = 1
-                ! scales(1) = -1 this makes the scale for each parameter the difference between the min max range (prior variance)
+                ! scales(1) = -1 this makes the scale for each parameter 
+                !the difference between the min max range
+                
                 ! anything else, still need to specify each scale factor
 
- ! note that the choice of scale does not ultimately affect the inversion as the models are re-dimensionalized in NA Bayes
+ ! note that the choice of scale does not ultimately affect the 
+ ! inversion as the models are re-dimensionalized in NA Bayes
  
  !-------------------------------------------------------------------------             
 
@@ -212,7 +215,8 @@ call read_config(planetModel,path2loveinputs,path2SLinputs,path2iceinputs)
   allocate(LIS_preMWP(nlat,nlon),GIS_preMWP(nlat,nlon),EIS_preMWP(nlat,nlon))
   allocate(WAIS_preMWP(nlat,nlon),WL_preMWP(nlat,nlon))
   allocate(LIS(nlat,nlon,ntimesduringMWP),GIS(nlat,nlon,ntimesduringMWP))
-  allocate(EIS(nlat,nlon,ntimesduringMWP),WAIS(nlat,nlon,ntimesduringMWP),WL(nlat,nlon,ntimesduringMWP))
+  allocate(EIS(nlat,nlon,ntimesduringMWP),WAIS(nlat,nlon,ntimesduringMWP))
+  allocate(WL(nlat,nlon,ntimesduringMWP))
 
   !initializing arrays
   icegrid(:,:,:)=0.0
@@ -276,15 +280,16 @@ call read_config(planetModel,path2loveinputs,path2SLinputs,path2iceinputs)
           end_time(i)=MAXVAL(times)
           endif
 
-        end_ix(i)=end_ix(i)-1 !we start the checkpoint at the timestep following 14.675 ka
-                              ! so this ensures melting ceases by the correct time within 
-                              !the checkpoint script
+        end_ix(i)=end_ix(i)-1 !we start the checkpoint at the timestep 
+                              ! following 14.675 ka, so this ensures 
+                              ! melting ceases by the correct time within 
+                              ! the checkpoint script
 
         enddo
 
         do i=1,5
-         if (model(i).lt.0.01) then !if the NA chooses e.s.l. less than 1cm
-                                   !set to zero 
+         if (model(i).lt.0.01) then ! if the NA chooses GMSL contribution
+                                    ! less than 1 cm, set to zero 
          model_overwrite(i)=0.0
          else 
          model_overwrite(i)=model(i)
@@ -368,7 +373,8 @@ baseload(:,:)=preMWP_icegrid(:,:) - LIS_preMWP(:,:) - GIS_preMWP(:,:) &
 ! LIS loss 
 i=1
 nactivetimesteps(i)=NINT(dur(i)/25.0) ! number of 25-y timesteps over which melting will occur
-per_tstep(i)=model_overwrite(i)/real(nactivetimesteps(i)) ! amount of ice to remove during each active melting timestep
+per_tstep(i)=model_overwrite(i)/real(nactivetimesteps(i)) ! amount of ice to remove during 
+                                                          ! each active melting timestep
 contribution(:,:)= LIS_preMWP(:,:)*per_tstep(i)*f_ice(i) ! spatially varying ice thickness to shave off 
                                                          ! during each active melting timestep 
 
@@ -468,7 +474,7 @@ contribution(:,:)=WL_preMWP(:,:)*per_tstep(i)*f_ice(i)
           enddo
 
 
-          ! sum contribution from each ice sheet at each time step to get total ice load for each time step
+! sum contribution from each ice sheet at each time step to get total ice load for each time step
           
           do j=1,ntimesduringMWP
           icegrid(:,:,j)=LIS(:,:,j)+GIS(:,:,j)+EIS(:,:,j)+WAIS(:,:,j)+WL(:,:,j)+baseload(:,:)
@@ -528,7 +534,7 @@ do j=1,ntimesduringMWP
 enddo
 
 
-! calculating misfit
+! calculating chi-squared misfit
  misfitval=0.0
 
 do i=1,ndata
@@ -542,7 +548,7 @@ lppd=misfitval
 
 write(*,*) 'misfit value for current model: ',lppd 
 
-! writing file with all predicted_data values for each forward model run:
+! writing file with the simulated RSL at each site for each forward model run:
 
        INQUIRE( FILE="predicted_data", EXIST=THERE ) 
          if ( THERE ) then 
@@ -582,7 +588,7 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
   include 'mwp_na_param.inc'
 
 ! NA variables and arrays
-  real,dimension(nd,ntot) :: models !changed from real*8
+  real,dimension(nd,ntot) :: models 
   real :: misfit(ntot) 
   real :: mfitmin
   real :: mfitminc
@@ -640,7 +646,7 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
 
 ! Write out final model
 
-  call display_final(lu_sum, models(1,mopt), nd)!, mfitmin)
+  call display_final(lu_sum, models(1,mopt), nd)
 
     do j=1,nd
        rmodel(j) = models(j,mopt) 
@@ -650,7 +656,7 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
 
  call forward(nd,rmodel,lppd,model_overwrite)
 
-! header for NAD file (can leave blank and set nh to 0)
+! write header for NAD file (can leave blank and set nh to 0)
 nh=0
 
 return
@@ -703,7 +709,6 @@ subroutine output_summary(lu_out, lu_sum, it, rmodel, &
   real :: mfitmin, mfitmean, mfitminc
   logical :: lw
   integer :: lu_sum, lu_out, it,  ntot, mopt
-! write out headers for files with summary of optimization performance
 
   lw = .true.
   if(lu_out.eq.0)lw = .false.

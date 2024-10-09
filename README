@@ -13,8 +13,8 @@ code/
 
 	include/ (files used by NA-SL code)
 	path_config (path configuration file to be read in by driver and forward sea-level model)
-	NA driver [currently cleaning up, to be uploaded by Oct 15]
-        forward sea-level model  [currently cleaning up, to be uploaded by Oct 15]
+	NA driver
+        forward sea-level model  
 	RSL calculation for SLIP data [currently cleaning up, to be uploaded by Oct 15] 
 
 data/

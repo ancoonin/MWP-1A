@@ -4,7 +4,8 @@
 !                                                                        !
 ! Driver program that calls the Neighbourhood algorithm routines of      !
 ! Sambridge et al. (1999) to search a parameter space.                   !
-! Currently set up for Sea Level Fingerprint of MWP-1A                   !
+! Currently set up for a synthetic test of the MWP-1A Sea Level          !
+! Fingerprint of MWP-1A                                                  !
 !                                                                        !
 ! Uses various modules : sea_level.f90, user_specs_mod.f90,              !
 !                        planets_mod.f90, constants_mod.f90              !

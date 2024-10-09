@@ -298,7 +298,8 @@ call read_config(planetModel,path2loveinputs,path2SLinputs,path2iceinputs)
          enddo
 
   do i=1,2
-        if (model(i).lt.0.01) then !if the NA chooses e.s.l. less than 1cm set to zero 
+        if (model(i).lt.0.01) then ! if the NA chooses GMSL contribution
+                                   ! less than 1cm, set to zero 
         model_overwrite(i)=0.0
         else 
         model_overwrite(i)=model(i)
@@ -316,8 +317,8 @@ call read_config(planetModel,path2loveinputs,path2SLinputs,path2iceinputs)
   
   !f_ice(1)=LIS_esl ! Laurentide Ice Sheet
   !f_ice(2)=GL_esl ! Greenland Ice Sheet
-  f_ice(1)=EIS_esl ! Eurasian Ice Sheet
-  f_ice(2)=WA_esl ! West Antarctic Ice Sheet
+  f_ice(1)=EIS_esl ! Eurasian Ice Sheet ! source considered for synthetic test
+  f_ice(2)=WA_esl ! West Antarctic Ice Sheet ! source considered for synthetic test
   !f_ice(5)=WL_esl ! Wilkes Land, East Antarctica
 
   ! load in pre-MWP ice grid (14.675 ka extent from ICE-7G)
@@ -475,7 +476,7 @@ lppd=misfitval
 
 write(*,*) 'misfit value for current model: ',lppd
 
-! writing predicted_data file with the simulated RSL at each site for each forward model run:
+! writing file with the simulated RSL at each site for each forward model run:
 
        INQUIRE( FILE="predicted_data", EXIST=THERE ) 
          if ( THERE ) then 
@@ -573,7 +574,7 @@ subroutine writemodels(nd,ntot,models,misfit,ns1,ns2,itmax, &
 
 ! Write out final model
 
-  call display_final(lu_sum, models(1,mopt), nd)!, mfitmin)
+  call display_final(lu_sum, models(1,mopt), nd)
 
     do j=1,nd
        rmodel(j) = models(j,mopt) 

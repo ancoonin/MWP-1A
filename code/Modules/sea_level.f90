@@ -651,6 +651,7 @@ rprimeT(:,:) = tresk(:,:)
 rT(:,:) = tresh(:,:)
 
 !AC: Reading in presaved information related to ice + ocean loading prior to MWP-1A
+!    These files can be found in the /inputs/sl_input directory
 
 open(unit = 99, file = trim(path2SLinputs)//'saved_vars.dat', form ='formatted', status='old')
 
@@ -1443,8 +1444,8 @@ write(*,'(A)') 'Writing output files...'
 
 if (convflag.eq.0) then !i.e. the sl run was successful
 
-!sea level change timeseries relative to the 
-!first checkpoint timestep at each site:
+! sea level change timeseries relative to the 
+! first MWP-1A timestep at each site:
 
 ! 1. Tahiti:
 predicted_data(1,:)=sl(tahiti_idx_lat,tahiti_idx_lon,first_tstep:nsteps) - sl(tahiti_idx_lat,tahiti_idx_lon,first_tstep)

@@ -70,7 +70,7 @@ subroutine user_init(nd,ranges,scales)
 
   scales(1)=-1 ! scales(1) = 0 this makes all scales = 1
               ! scales(1) = -1 this makes the scale for each parameter
-              ! the difference between the min max range (prior variance)
+              ! the difference between the min max range 
               
               ! anything else, still need to specify each scale factor
 
@@ -299,7 +299,7 @@ call read_config(planetModel,path2loveinputs,path2SLinputs,path2iceinputs)
 
   do i=1,2
         if (model(i).lt.0.01) then ! if the NA chooses GMSL contribution
-                                   ! less than 1cm, set to zero 
+                                   ! less than 1 cm, set to zero 
         model_overwrite(i)=0.0
         else 
         model_overwrite(i)=model(i)

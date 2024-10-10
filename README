@@ -29,5 +29,7 @@ synthetic_test/
 	include/ (files used by NA-SL code)
 	data/ (outputs from NA Sampler and NA Bayes)
 
+RSL_probability/
+	MATLAB scripts for bootstrapping method of calculating the age-RSL distributions of each SLIP
 
-
+For further information, email Allie Coonin, allie_coonin@brown.edu

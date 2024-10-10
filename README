@@ -31,5 +31,6 @@ synthetic_test/
 
 RSL_probability/
 	MATLAB scripts for bootstrapping method of calculating the age-RSL distributions of each SLIP
+	Recalibrated C-14 ages for N.W. Scotland data (Oxcal 4.4, IntCal20 calibration curve) 
 
 For further information, email Allie Coonin, allie_coonin@brown.edu

@@ -1,0 +1,16 @@
+This directory contains the code developed for the MWP-1A application 
+of the Neighborhood Algorithm (NA) Sampler (Sambridge, 1999).
+
+Source code for the NA can be downloaded at https://iearth.edu.au/codes/NA/
+
+See the provided demo for how to incorporate the MWP-1A driver and modules
+
+The forward sea-level model code based on Kendall et al. (2005) is found in
+Modules/sea_level.f90
+
+References
+1. Sambridge, M. (1999). Geophysical inversion with a neighbourhood algorithm—I. 
+   Searching a parameter space. Geophysical journal international, 138(2), 479-494.
+2. Kendall, R. A., Mitrovica, J. X., & Milne, G. A. (2005). On post-glacial sea level–II.
+   Numerical formulation and comparative results on spherically symmetric models. 
+   Geophysical Journal International, 161(3), 679-706.

@@ -1,0 +1,8 @@
+This directory contains the codes modified from Hibbert et al. (2018) to apply our bootstrapping method 
+that samples the full age and RSL distributions and propagates the associated error, as well as the Oxcal 4.4 
+recalibrated C-14 age distributions for the data used in the paper.
+
+
+The updated C-14 age distributions used in the paper are provided in NWScotland/ for the Northwest Scotland data site 
+and in Hibbert_2018_database/ for all other data sites
+

@@ -1,0 +1,22 @@
+This directory contains the radial displacement and gravitational potential 
+perturbation Love numbers (read in by the forward sea-level module sea_level.f90).
+
+"prem.lXX.umvm7.lmvm7" represents the earth model of elastic structure from PREM (Dziewonski and Anderson, 1981), 
+with the steady state upper and lower mantle viscosity profiles from the VM7 model (Roy and Peltier, 2018),and a
+lithospheric thickness of XX.
+
+"_eb" refers to the Extended Burgers Rheology Earth model
+
+"_mxmc" refers to the transient viscoelastic rheology model of McCarthy et al. (2001),
+        scaled to the reference Maxell VM7 Earth model
+
+"_maxwell" refers to the Maxwell VM7 Earth model (Maxwell viscoelastic rheology)
+
+References
+1. Dziewonski, A. M., & Anderson, D. L. (1981). Preliminary reference Earth model. Physics of the earth and 
+   planetary interiors, 25(4), 297-356.
+2. Roy, K., & Peltier, W. R. (2018). Relative sea level in the Western Mediterranean basin: A regional
+   test of the ICE-7G_NA (VM7) model and a constraint on late Holocene Antarctic deglaciation. Quaternary Science Reviews, 183, 76-87.
+3. McCarthy, C., Takei, Y., & Hiraga, T. (2011). Experimental study of attenuation and dispersion 
+   over a broad frequency range: 2. The universal scaling of polycrystalline materials. Journal of Geophysical Research: 
+   Solid Earth, 116(B9).

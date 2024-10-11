@@ -23,7 +23,6 @@ data/
 		output model ensemble from NA Sampler
 		output Bayesian statistics from NA Bayes 
 
-
 synthetic_test/
 	NA driver script
 	include/ (files used by NA-SL code)
@@ -31,6 +30,7 @@ synthetic_test/
 
 RSL_probability/
 	MATLAB scripts for bootstrapping method of calculating the age-RSL distributions of each SLIP
-	Recalibrated C-14 ages for N.W. Scotland data (Oxcal 4.4, IntCal20 calibration curve) 
+	NWScotland/ Recalibrated C-14 ages for N.W. Scotland data (Oxcal 4.4, IntCal20 calibration curve) 
+	Hibbert_2018_database/ Recalibrated C-14 ages for all other data used in the paper
 
 For further information, email Allie Coonin, allie_coonin@brown.edu

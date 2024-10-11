@@ -15,7 +15,6 @@ code/
 	path_config (path configuration file to be read in by driver and forward sea-level model)
 	NA driver
         forward sea-level model  
-	RSL calculation for SLIP data [currently cleaning up, to be uploaded by Oct 15] 
 
 data/
 
@@ -27,9 +26,11 @@ synthetic_test/
 	NA driver script
 	include/ (files used by NA-SL code)
 	data/ (outputs from NA Sampler and NA Bayes)
+	codes to read in outputs of NA Sampler and NA Bayes
+	
 
 RSL_probability/
-	MATLAB scripts for bootstrapping method of calculating the age-RSL distributions of each SLIP
+	MATLAB scripts for bootstrapping method of calculating the age-RSL distributions of SLIPs
 	NWScotland/ Recalibrated C-14 ages for N.W. Scotland data (Oxcal 4.4, IntCal20 calibration curve) 
 	Hibbert_2018_database/ Recalibrated C-14 ages for all other data used in the paper
 

@@ -1,0 +1,38 @@
+This directory contains sample codes to read/plot the output files from the NA Sampler (na.sum)
+and NA Bayes (nab.out). 
+
+i.   read_na_sum
+required files: na.sum (output from NA sampler), predicted_data (output from NA Sampler), 
+                and synthetic_data
+
+  (a)na.sum is the summary file output from the NA Sampler
+
+  (b)synthetic_data is an (nsites) x (ntimesteps) array of RSL over MWP-1A where:
+
+  nsites = 6 (Tahiti, Barbados, Sunda Shelf, Hydrographer's Pass, Noggin Passage, NW Scotland)
+  ntimesteps=37 (time steps used by the forward sea-level model)
+
+  Each row contains the RSL timeseries at the sites (in the order as they are listed above).
+  This is the data with which the NA sampler tries to minimize misfit. In a real inversion
+  with the NA, the synthetic_data array is just the observed data.
+  
+  (c)predicted_data is an (nmodels x nsites) x (ntimesteps+1) array of RSL over MWP-1A where:
+
+  nmodels is the total number of forward models sampled by the NA.
+
+  Every 6 rows represent the predicted RSL timeseries at each site in the order as listed above.
+  The value in the last column is the chi-squared misfit with the data, as computed within the 
+  MWP-1A NA sampler codes.
+
+
+ii.  read_nab_file_exp.m : used to check for convergence of numerical integration of expectation values
+required files: nab.out (output from NA Bayes) 
+
+iii. read_nab_cov.m : used to read in and plot the posterior covariance matrix 
+required files: nab.out 
+
+iv.  read_nab_file_1d_PDF.m : used to read in and plot the posterior marginal probability distributions
+required files: nab.out 
+
+v.   read_nab_file_2d.m : used to read in and plot the joint posterior probability distributions
+required files: nab.out 

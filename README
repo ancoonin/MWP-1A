@@ -1,4 +1,4 @@
-Coonin, Lau, and Coulson 2024 MWP-1A paper
+A.N. Coonin, H.C.P. Lau, and S. Coulson MWP-1A paper
 
 
 Full contents of the repository:
@@ -23,6 +23,7 @@ data/
 		output Bayesian statistics from NA Bayes 
 
 synthetic_test/
+
 	NA driver script
 	include/ (files used by NA-SL code)
 	data/ (outputs from NA Sampler and NA Bayes)
@@ -30,6 +31,7 @@ synthetic_test/
 	
 
 RSL_probability/
+
 	MATLAB scripts for bootstrapping method of calculating the age-RSL distributions of SLIPs
 	NWScotland/ Recalibrated C-14 ages for N.W. Scotland data (Oxcal 4.4, IntCal20 calibration curve) 
 	Hibbert_2018_database/ Recalibrated C-14 ages for all other data used in the paper
